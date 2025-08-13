@@ -1,0 +1,23 @@
+app:
+  security:
+    secret: ${JWT_SECRET}
+    access: 1
+    refresh: 30
+
+spring:
+  application:
+    name: filesharing
+  datasource:
+    url: jdbc:postgresql://localhost:5432/filesharing
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  liquibase:
+    enabled: false
+
+api:
+  version: 1.0.0
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+  override-with-generic-response: false
