@@ -7,9 +7,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.java.filesharing.entity.file.File;
+import ru.java.filesharing.service.FileResponseAssemblerService;
 import ru.java.filesharing.service.FileService;
 import ru.java.filesharing.web.dto.file.response.GetFileResponse;
-import ru.java.filesharing.web.mapper.FileMapper;
 
 @RestController
 @RequestMapping("api/v1/files")
@@ -18,13 +18,13 @@ import ru.java.filesharing.web.mapper.FileMapper;
 @RequiredArgsConstructor
 public class FileController {
     private final FileService fileService;
-    private final FileMapper fileMapper;
+    private final FileResponseAssemblerService fileResponseAssemblerService;
 
     @GetMapping("/{id}")
     @Operation(summary = "Get file by id")
     public GetFileResponse getById(@PathVariable Long id) {
         File file = fileService.getById(id);
-        return fileMapper.mapToGetFileResponse(file);
+        return fileResponseAssemblerService.mapToGetFileResponse(file);
     }
 
     @DeleteMapping("/{id}")

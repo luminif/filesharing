@@ -6,13 +6,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.java.filesharing.constants.Constants;
+import ru.java.filesharing.entity.file.File;
 import ru.java.filesharing.entity.user.Role;
 import ru.java.filesharing.entity.user.User;
+import ru.java.filesharing.exception.FileDeleteException;
 import ru.java.filesharing.exception.UserAlreadyExistsException;
 import ru.java.filesharing.exception.UserNotFoundException;
 import ru.java.filesharing.repository.UserRepository;
+import ru.java.filesharing.service.FileService;
+import ru.java.filesharing.service.MinioService;
 import ru.java.filesharing.service.UserService;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -21,6 +26,8 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
+    private final FileService fileService;
+    private final MinioService minioService;
 
     @Override
     @Transactional(readOnly = true)
@@ -61,7 +68,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void delete(Long id) {
-        userRepository.delete(id);
+        List<File> files = fileService.getFilesByUserId(id);
+
+        try {
+            files.forEach(file -> minioService.delete(file.getStorageKey()));
+            userRepository.delete(id);
+        } catch (Exception e) {
+            throw new FileDeleteException(e.getMessage());
+        }
     }
 
     @Override

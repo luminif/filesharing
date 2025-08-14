@@ -3,6 +3,11 @@ app:
     secret: ${JWT_SECRET}
     access: 1
     refresh: 30
+  minio:
+    bucket: ${MINIO_BUCKET}
+    url: ${MINIO_URL}
+    accessKey: ${MINIO_ACCESS_KEY}
+    secretKey: ${MINIO_SECRET_KEY}
 
 spring:
   application:
@@ -13,6 +18,10 @@ spring:
     password: ${DB_PASSWORD}
   liquibase:
     enabled: false
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
 
 api:
   version: 1.0.0

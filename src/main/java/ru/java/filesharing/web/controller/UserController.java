@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.java.filesharing.entity.file.File;
 import ru.java.filesharing.entity.user.User;
+import ru.java.filesharing.service.FileResponseAssemblerService;
 import ru.java.filesharing.service.FileService;
 import ru.java.filesharing.service.UserService;
 import ru.java.filesharing.web.dto.file.request.CreateFileRequest;
@@ -31,6 +32,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final FileService fileService;
+    private final FileResponseAssemblerService fileResponseAssemblerService;
 
     private final UserMapper userMapper;
     private final FileMapper fileMapper;
@@ -65,7 +67,7 @@ public class UserController {
     @Operation(summary = "Get files by user id")
     public List<GetFileResponse> getFilesByUserId(@PathVariable Long id) {
         List<File> files = fileService.getFilesByUserId(id);
-        return fileMapper.mapToGetFileResponse(files);
+        return fileResponseAssemblerService.mapToGetFileResponse(files);
     }
 
     @PostMapping(value = "/{id}/files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -75,6 +77,6 @@ public class UserController {
         File file = fileMapper.mapToEntity(request);
         file.setOwnerId(id);
         File createdFile = fileService.create(file, request.file());
-        return fileMapper.mapToCreateFileResponse(fileService.getById(createdFile.getId()));
+        return fileResponseAssemblerService.mapToCreateFileResponse(fileService.getById(createdFile.getId()));
     }
 }

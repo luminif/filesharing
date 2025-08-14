@@ -8,12 +8,22 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(
     @NotNull
-    Security security
+    Security security,
+    @NotNull
+    Minio minio
 ) {
     public record Security(
         String secret,
         Long access,
         Long refresh
+    ) {
+    }
+
+    public record Minio(
+        String bucket,
+        String url,
+        String accessKey,
+        String secretKey
     ) {
     }
 }

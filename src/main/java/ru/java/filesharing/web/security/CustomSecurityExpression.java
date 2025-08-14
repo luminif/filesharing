@@ -7,7 +7,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import ru.java.filesharing.entity.user.Role;
 import ru.java.filesharing.service.UserService;
-import ru.java.filesharing.web.security.JwtEntity;
 
 @Component
 @RequiredArgsConstructor
