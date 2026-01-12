@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ApiErrorResponseHandlerController {
-
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiErrorResponse handleUserNotFoundException(UserNotFoundException e) {

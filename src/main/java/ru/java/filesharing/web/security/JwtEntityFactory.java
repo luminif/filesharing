@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JwtEntityFactory {
-
     public static JwtEntity create(User user) {
         return new JwtEntity(
             user.getId(),

@@ -1,6 +1,5 @@
 package ru.java.filesharing.web.security;
 
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -30,7 +29,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-
     private final ApplicationConfig config;
     private final UserDetailsService userDetailsService;
     private final UserService userService;

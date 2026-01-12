@@ -17,7 +17,6 @@ import java.util.UUID;
 @Repository
 @RequiredArgsConstructor
 public class FileRepositoryImpl implements FileRepository {
-
     private final JdbcTemplate jdbcTemplate;
 
     @Override

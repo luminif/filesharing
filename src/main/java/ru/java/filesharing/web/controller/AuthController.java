@@ -23,11 +23,8 @@ import ru.java.filesharing.web.mapper.UserMapper;
 @Tag(name = "Auth controller")
 @RequiredArgsConstructor
 public class AuthController {
-
     private final AuthService authService;
-
     private final UserService userService;
-
     private final UserMapper userMapper;
 
     @PostMapping("/login")

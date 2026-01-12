@@ -17,10 +17,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
-
     private final JdbcTemplate jdbcTemplate;
-
-    private final UserRowMapper userResultSetExtractor = new UserRowMapper();
 
     @Override
     public Optional<User> findById(Long id) {
@@ -44,7 +41,7 @@ public class UserRepositoryImpl implements UserRepository {
             WHERE u.id = ?
             """;
 
-        return Optional.ofNullable(jdbcTemplate.query(sql, userResultSetExtractor, id));
+        return Optional.ofNullable(jdbcTemplate.query(sql, new UserRowMapper(), id));
     }
 
     @Override
@@ -69,7 +66,7 @@ public class UserRepositoryImpl implements UserRepository {
             WHERE u.username = ?
             """;
 
-        return Optional.ofNullable(jdbcTemplate.query(sql, userResultSetExtractor, username));
+        return Optional.ofNullable(jdbcTemplate.query(sql, new UserRowMapper(), username));
     }
 
     @Override

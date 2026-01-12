@@ -19,7 +19,6 @@ import ru.java.filesharing.constants.Constants;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtTokenFilter extends GenericFilterBean {
-
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override

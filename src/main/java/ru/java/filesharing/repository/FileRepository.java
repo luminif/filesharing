@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface FileRepository {
-
     Optional<File> findById(Long id);
 
     Optional<File> findByStorageKey(UUID storageKey);

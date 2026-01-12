@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface FileService {
-
     File getById(Long id);
 
     File getByStorageKey(UUID storageKey);

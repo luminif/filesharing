@@ -1,6 +1,5 @@
 package ru.java.filesharing.web.security;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +13,6 @@ import ru.java.filesharing.service.UserService;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtUserDetailsService implements UserDetailsService {
-
     private final UserService userService;
 
     @Override
