@@ -47,4 +47,9 @@ public class JpaUserRepository implements UserRepository {
     public boolean isFileOwner(Long fileId, Long userId) {
         return jpaUserRepositoryAdapter.isFileOwner(fileId, userId);
     }
+
+    @Override
+    public Optional<String> findUsernameById(Long userId) {
+        return jpaUserRepositoryAdapter.findUsernameById(userId);
+    }
 }

@@ -113,4 +113,14 @@ public class JdbcUserRepository implements UserRepository {
             """;
         return jdbcTemplate.queryForObject(sql, Boolean.class, fileId, userId);
     }
+
+    @Override
+    public Optional<String> findUsernameById(Long userId) {
+        String sql = "SELECT username FROM users WHERE id = ?";
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, String.class, userId));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
 }

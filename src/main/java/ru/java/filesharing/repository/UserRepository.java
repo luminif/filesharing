@@ -19,4 +19,6 @@ public interface UserRepository {
     void delete(Long id);
 
     boolean isFileOwner(Long fileId, Long userId);
+
+    Optional<String> findUsernameById(Long userId);
 }

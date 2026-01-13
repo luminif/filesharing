@@ -17,4 +17,7 @@ public interface JpaUserRepositoryAdapter extends JpaRepository<User, Long> {
             )
             """, nativeQuery = true)
     boolean isFileOwner(Long fileId, Long userId);
+
+    @Query(value = "SELECT u.username FROM users u WHERE u.id = :userId", nativeQuery = true)
+    Optional<String> findUsernameById(Long userId);
 }

@@ -12,8 +12,8 @@ import ru.java.filesharing.entity.user.User;
 import ru.java.filesharing.exception.FileDeleteException;
 import ru.java.filesharing.exception.UserAlreadyExistsException;
 import ru.java.filesharing.exception.UserNotFoundException;
+import ru.java.filesharing.repository.FileRepository;
 import ru.java.filesharing.repository.UserRepository;
-import ru.java.filesharing.service.FileService;
 import ru.java.filesharing.service.MinioService;
 import ru.java.filesharing.service.UserService;
 
@@ -26,7 +26,7 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
-    private final FileService fileService;
+    private final FileRepository fileRepository;
     private final MinioService minioService;
 
     @Override
@@ -64,21 +64,21 @@ public class UserServiceImpl implements UserService {
         userRepository.create(user);
         userRepository.insertUserRole(user.getId(), Role.ROLE_USER);
         user.setRoles(Set.of(Role.ROLE_USER));
-        return userRepository.findById(user.getId()).get();
+        return userRepository.findById(user.getId())
+            .orElseThrow(() -> new UserNotFoundException(Constants.USER_NOT_FOUND_MESSAGE));
     }
 
     @Override
     @Transactional(readOnly = true)
     public String getUsernameById(Long userId) {
-        return userRepository.findById(userId)
-            .map(User::getUsername)
+        return userRepository.findUsernameById(userId)
             .orElseThrow(() -> new UserNotFoundException(Constants.USER_NOT_FOUND_MESSAGE));
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        List<File> files = fileService.getFilesByUserId(id);
+        List<File> files = fileRepository.findFilesByUserId(id);
 
         try {
             files.forEach(file -> minioService.delete(file.getStorageKey()));
