@@ -1,4 +1,4 @@
-package ru.java.filesharing.repository.impl;
+package ru.java.filesharing.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class FileRepositoryImpl implements FileRepository {
+public class JdbcFileRepository implements FileRepository {
     private final JdbcTemplate jdbcTemplate;
 
     @Override

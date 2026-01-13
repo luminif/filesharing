@@ -11,6 +11,8 @@ public interface UserService {
 
     User create(User user);
 
+    String getUsernameById(Long userId);
+
     void delete(Long id);
 
     boolean isFileOwner(Long fileId, Long userId);

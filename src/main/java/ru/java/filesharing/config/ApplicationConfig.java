@@ -10,7 +10,9 @@ public record ApplicationConfig(
     @NotNull
     Security security,
     @NotNull
-    Minio minio
+    Minio minio,
+    @NotNull
+    String databaseAccessType
 ) {
     public record Security(
         String secret,

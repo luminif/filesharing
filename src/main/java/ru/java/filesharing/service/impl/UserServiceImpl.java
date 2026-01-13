@@ -46,9 +46,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User update(User user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-        userRepository.update(user);
-        return userRepository.findById(user.getId()).get();
+        User existingUser = userRepository.findById(user.getId())
+            .orElseThrow(() -> new UserNotFoundException(Constants.USER_NOT_FOUND_MESSAGE));
+        existingUser.setPassword(encoder.encode(user.getPassword()));
+        userRepository.update(existingUser);
+        return existingUser;
     }
 
     @Override
@@ -66,6 +68,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public String getUsernameById(Long userId) {
+        return userRepository.findById(userId)
+            .map(User::getUsername)
+            .orElseThrow(() -> new UserNotFoundException(Constants.USER_NOT_FOUND_MESSAGE));
+    }
+
+    @Override
     @Transactional
     public void delete(Long id) {
         List<File> files = fileService.getFilesByUserId(id);
@@ -79,6 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isFileOwner(Long fileId, Long userId) {
         return userRepository.isFileOwner(fileId, userId);
     }
