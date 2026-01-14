@@ -82,7 +82,8 @@ public class JwtTokenProvider {
         }
 
         Long userId = Long.valueOf(getId(refreshToken));
-        User user = userService.getById(userId);
+        String username = getUsername(refreshToken);
+        User user = userService.getByUsername(username);
 
         return new JwtResponse(
             userId,

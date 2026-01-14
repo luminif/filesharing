@@ -1,19 +1,20 @@
 package ru.java.filesharing.service;
 
-import org.springframework.web.multipart.MultipartFile;
-import ru.java.filesharing.entity.file.File;
+import ru.java.filesharing.web.dto.file.request.CreateFileRequest;
+import ru.java.filesharing.web.dto.file.response.CreateFileResponse;
+import ru.java.filesharing.web.dto.file.response.GetFileResponse;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface FileService {
-    File getById(Long id);
+    GetFileResponse getById(Long id);
 
-    File getByStorageKey(UUID storageKey);
+    GetFileResponse getByStorageKey(UUID storageKey);
 
-    List<File> getFilesByUserId(Long userId);
+    List<GetFileResponse> getFilesByUserId(Long userId);
 
-    File create(File file, MultipartFile multipartFile);
+    CreateFileResponse create(Long ownerId, CreateFileRequest request);
 
     void delete(Long id);
 }

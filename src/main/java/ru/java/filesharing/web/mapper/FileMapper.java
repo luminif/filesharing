@@ -5,7 +5,6 @@ import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.java.filesharing.entity.file.File;
-import ru.java.filesharing.web.dto.file.request.CreateFileRequest;
 import ru.java.filesharing.web.dto.file.response.CreateFileResponse;
 import ru.java.filesharing.web.dto.file.response.GetFileResponse;
 
@@ -21,6 +20,4 @@ public interface FileMapper {
 
     @Mapping(target = "downloadUrl", expression = "java(downloadUrl)")
     CreateFileResponse mapToCreateFileResponse(File file, @Context String downloadUrl);
-
-    File mapToEntity(CreateFileRequest request);
 }

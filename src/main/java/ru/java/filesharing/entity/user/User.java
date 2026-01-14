@@ -3,10 +3,8 @@ package ru.java.filesharing.entity.user;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import ru.java.filesharing.entity.file.File;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,10 +24,6 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "role")
     private Set<Role> roles;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", insertable = false, updatable = false)
-    private List<File> files;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

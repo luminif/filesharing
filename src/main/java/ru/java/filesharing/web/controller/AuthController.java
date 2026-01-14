@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.java.filesharing.entity.user.User;
 import ru.java.filesharing.service.AuthService;
 import ru.java.filesharing.service.UserService;
 import ru.java.filesharing.web.dto.auth.JwtRequest;
 import ru.java.filesharing.web.dto.auth.JwtResponse;
 import ru.java.filesharing.web.dto.user.request.CreateUserRequest;
 import ru.java.filesharing.web.dto.user.response.CreateUserResponse;
-import ru.java.filesharing.web.mapper.UserMapper;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -25,7 +23,6 @@ import ru.java.filesharing.web.mapper.UserMapper;
 public class AuthController {
     private final AuthService authService;
     private final UserService userService;
-    private final UserMapper userMapper;
 
     @PostMapping("/login")
     @Operation(summary = "Login")
@@ -35,10 +32,8 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Register")
-    public CreateUserResponse register(@Validated @RequestBody CreateUserRequest dto) {
-        User user = userMapper.mapFromCreateUserRequestToEntity(dto);
-        User createdUser = userService.create(user);
-        return userMapper.mapToCreateUserResponse(createdUser);
+    public CreateUserResponse register(@Validated @RequestBody CreateUserRequest request) {
+        return userService.create(request);
     }
 
     @PostMapping("/refresh")

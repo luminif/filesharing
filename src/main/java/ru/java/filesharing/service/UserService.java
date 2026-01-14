@@ -1,15 +1,20 @@
 package ru.java.filesharing.service;
 
 import ru.java.filesharing.entity.user.User;
+import ru.java.filesharing.web.dto.user.request.CreateUserRequest;
+import ru.java.filesharing.web.dto.user.request.UpdateUserRequest;
+import ru.java.filesharing.web.dto.user.response.CreateUserResponse;
+import ru.java.filesharing.web.dto.user.response.GetUserResponse;
+import ru.java.filesharing.web.dto.user.response.UpdateUserResponse;
 
 public interface UserService {
-    User getById(Long id);
+    GetUserResponse getById(Long id);
 
     User getByUsername(String username);
 
-    User update(User user);
+    UpdateUserResponse update(Long id, UpdateUserRequest request);
 
-    User create(User user);
+    CreateUserResponse create(CreateUserRequest request);
 
     String getUsernameById(Long userId);
 

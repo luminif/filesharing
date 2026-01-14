@@ -16,6 +16,12 @@ import ru.java.filesharing.repository.FileRepository;
 import ru.java.filesharing.repository.UserRepository;
 import ru.java.filesharing.service.MinioService;
 import ru.java.filesharing.service.UserService;
+import ru.java.filesharing.web.dto.user.request.CreateUserRequest;
+import ru.java.filesharing.web.dto.user.request.UpdateUserRequest;
+import ru.java.filesharing.web.dto.user.response.CreateUserResponse;
+import ru.java.filesharing.web.dto.user.response.GetUserResponse;
+import ru.java.filesharing.web.dto.user.response.UpdateUserResponse;
+import ru.java.filesharing.web.mapper.UserMapper;
 
 import java.util.List;
 import java.util.Set;
@@ -28,12 +34,14 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final FileRepository fileRepository;
     private final MinioService minioService;
+    private final UserMapper userMapper;
 
     @Override
     @Transactional(readOnly = true)
-    public User getById(Long id) {
-        return userRepository.findById(id)
+    public GetUserResponse getById(Long id) {
+        User user = userRepository.findById(id)
             .orElseThrow(() -> new UserNotFoundException(Constants.USER_NOT_FOUND_MESSAGE));
+        return userMapper.mapToGetUserResponse(user);
     }
 
     @Override
@@ -45,27 +53,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User update(User user) {
-        User existingUser = userRepository.findById(user.getId())
+    public UpdateUserResponse update(Long id, UpdateUserRequest request) {
+        User existingUser = userRepository.findById(id)
             .orElseThrow(() -> new UserNotFoundException(Constants.USER_NOT_FOUND_MESSAGE));
-        existingUser.setPassword(encoder.encode(user.getPassword()));
+
+        User updateData = userMapper.mapFromUpdateUserRequestToEntity(request);
+        existingUser.setPassword(encoder.encode(updateData.getPassword()));
         userRepository.update(existingUser);
-        return existingUser;
+        return userMapper.mapToUpdateUserResponse(existingUser);
     }
 
     @Override
     @Transactional
-    public User create(User user) {
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+    public CreateUserResponse create(CreateUserRequest request) {
+        if (userRepository.findByUsername(request.username()).isPresent()) {
             throw new UserAlreadyExistsException(Constants.USER_ALREADY_EXISTS_MESSAGE);
         }
 
+        User user = userMapper.mapFromCreateUserRequestToEntity(request);
         user.setPassword(encoder.encode(user.getPassword()));
         userRepository.create(user);
         userRepository.insertUserRole(user.getId(), Role.ROLE_USER);
         user.setRoles(Set.of(Role.ROLE_USER));
-        return userRepository.findById(user.getId())
+        
+        User createdUser = userRepository.findById(user.getId())
             .orElseThrow(() -> new UserNotFoundException(Constants.USER_NOT_FOUND_MESSAGE));
+        return userMapper.mapToCreateUserResponse(createdUser);
     }
 
     @Override
