@@ -1,0 +1,50 @@
+services:
+  postgresql:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: filesharing
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  liquibase-migrations:
+    image: liquibase/liquibase:4.25
+    depends_on:
+      - postgresql
+    command:
+      - --changelog-file=master.xml
+      - --driver=org.postgresql.Driver
+      - --url=jdbc:postgresql://postgresql:5432/filesharing
+      - --username=${DB_USERNAME}
+      - --password=${DB_PASSWORD}
+      - update
+    volumes:
+      - ./migrations:/liquibase/changelog
+    networks:
+      - backend
+
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9090:9090"
+      - "9000:9000"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+    command: server /minio --console-address :9090
+    volumes:
+      - minio_data:/minio
+    networks:
+      - backend
+
+volumes:
+  postgresql: { }
+  minio_data: { }
+
+networks:
+  backend: { }
